@@ -1,94 +1,68 @@
-#include<iostream>
-#include<string>
-#include<vector>
-#include <fstream>
 using namespace std;
-
-bool check( vector <string> text ,vector<string> pattern){
-    long text_size = text.size();                           // size of text vector
-    long pattern_size = pattern.size();                     // size of pattern vector
-    if( text_size  < pattern_size ) {
-        // if size of pattern is greater than size of text , then it's not possible to search pattern in text. so return false
+#include<string>
+#include<iostream>
+#include<vector>
+bool check_subsequence(vector<string> A,vector<string> B)
+{
+    int m=A.size();
+    int n=B.size();
+    if(m<n)
         return false;
-    }
-    int itr1 = 0;                                           // for text pointer
-    int itr2 = 0;                                           // for pattern pointer
-    while(itr1 < text_size && itr2 < pattern_size ) {
-        if( text[itr1].compare(pattern[itr2]) == 0 ) {            // if matched , then increment both pointer
-            itr1++;
-            itr2++;
+    int i=0;
+    int j=0;
+    while(i<m&&j<n)
+    {
+        if(!B[j].compare(A[i]))
+        {
+            i++;
+            j++;
         }
-        else {
-            itr1++;                                         // otherwise increment text pointer only
-        }
+        else
+        i++;
     }
-    if ( itr2 == pattern_size ) {
-        // if pattern pointer is equal to size of pattern , then pattern exists in the text
-        return true;
+    if (j==n)
+    {
+        return 1;
     }
-    else {
-        // otherwise text does not contain pattern
-        return false;
-    }
+    else
+    return 0;
 }
-
-
-int main() {
-    // text_file.txt and pattern_file.txt and this program should be in the same file.
-    // reading from text_file.txt and storing it in text vector
-    vector <string> text;
-    ifstream myfile1 ("text_file.txt");
-    if ( myfile1 ) {
-        string line;
-        while ( getline (myfile1 , line) ) {
-            string temp = "";
-            for(int i = 0; i < line.length(); ++i) {
-                if( line.substr(i,3).compare(" , ") != 0) {  // getting ' , ' then store it
-                    temp += line[i];
-                }
-                else {
-                    text.push_back(temp);
-                    temp = "";
-                    i = i + 2;
-                }
-
-            }
+int main()
+{
+    vector<string> a;
+    vector<string> b;
+    cout<<"Enter events A:";
+    bool acontinue=true;
+    do
+    {
+        string atemp;
+        getline(cin,atemp);
+        if(!atemp.compare("exit"))//type exit to stop
+        {
+            acontinue=false;
         }
-        myfile1.close();
-    }
-    else {
-        cout << "\nUnable to open text file\n";
-    }
-    
-    // reading from pattern_file.txt and storing it in pattern vector
-    vector <string> pattern;
-    ifstream myfile2 ("pattern_file.txt");
-    if (myfile2) {
-        string line;
-        while ( getline (myfile2 , line) ) {
-            string temp = "";
-            for(int i = 0; i < line.length(); ++i) {
-                if( line.substr(i,1).compare(" , ") != 0) {   // getting ' , ' then store it
-                    temp += line[i];
-                }
-                else {
-                    pattern.push_back(temp);
-                    temp = "";
-                    i = i + 2;
-                }
-                
-            }
+        else
+            a.push_back(atemp);
+    }while(acontinue);
+   
+    cout<<"Enter events B:";
+    bool bcontinue=true;
+    do
+    {
+        string btemp;
+        getline(cin,btemp);
+        if(!btemp.compare("exit"))
+        {
+            bcontinue=false;
         }
-        myfile2.close();
-    }
-    else {
-        cout << "\nUnable to open pattern file\n";
-    }
-    if( check( text , pattern ) ) {
-        cout<<"\nText contains Pattern\n";
-    }
-    else {
-        cout<<"\nText does not contain Pattern\n";
-    }
+        else
+            b.push_back(btemp);
+    }while(bcontinue);
+   
+    if(check_subsequence(a,b))
+    cout<<"\nyes,list of events b is a subsequence of events b";
+    else
+    cout<<"no";
+
     return 0;
 }
